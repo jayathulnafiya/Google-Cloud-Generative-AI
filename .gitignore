@@ -29,3 +29,9 @@ desktop.ini
 
 # --- Misc ---
 *.log
+
+# --- Local scratch files from running the app ---
+_server.err
+_server.pid
+_server.log
+_full.txt
