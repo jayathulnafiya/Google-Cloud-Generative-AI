@@ -1,0 +1,31 @@
+# --- Secrets: never commit real API keys ---
+.env
+.env.local
+*.env
+!.env.example
+
+# --- Python virtual environment (large, machine-specific) ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Python caches / build output ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# --- Editors and OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Misc ---
+*.log

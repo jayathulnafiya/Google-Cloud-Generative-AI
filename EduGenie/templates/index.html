@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGenie - Learning Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>✨ EduGenie</h1>
+            <p>Your Google Gemini Powered Learning Assistant</p>
+        </header>
+
+        <main>
+            <form action="/process" method="POST" class="card">
+                <div class="form-group">
+                    <label for="task">Select Task:</label>
+                    <select name="task" id="task" required>
+                        <option value="explain" {% if selected_task=='explain' %}selected{% endif %}>Concept Explanation
+                        </option>
+                        <option value="qa" {% if selected_task=='qa' %}selected{% endif %}>Q&A (Question & Answer)
+                        </option>
+                        <option value="quiz" {% if selected_task=='quiz' %}selected{% endif %}>Generate Quiz</option>
+                        <option value="summarize" {% if selected_task=='summarize' %}selected{% endif %}>Summarize
+                            Passage</option>
+                        <option value="recommend" {% if selected_task=='recommend' %}selected{% endif %}>Personalized
+                            Learning Path</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="user_input">Enter Topic, Question, or Passage:</label>
+                    <textarea name="user_input" id="user_input" rows="5"
+                        placeholder="Type or paste your content here..." required>{{ user_input or '' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Generate with EduGenie</button>
+            </form>
+
+            {% if result or quiz_data %}
+            <div class="result-card">
+                <h2>Results</h2>
+                {% if quiz_data %}
+                {% if quiz_data.error %}
+                <p class="error">{{ quiz_data.error }}</p>
+                {% else %}
+                <ol class="quiz-list">
+                    {% for q in quiz_data %}
+                    <li>
+                        <strong>{{ q.question }}</strong>
+                        <ul>
+                            {% for opt in q.options %}
+                            <li>{{ opt }}</li>
+                            {% endfor %}
+                        </ul>
+                        <p class="answer"><em>Correct Answer: {{ q.correct_answer }}</em></p>
+                    </li>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+                {% else %}
+                <div class="markdown-output">
+                    <p>{{ result | safe }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+
+</html>

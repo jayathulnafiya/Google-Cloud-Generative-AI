@@ -1,0 +1,113 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 750px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    color: #4a90e2;
+    margin-bottom: 5px;
+}
+
+header p {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.card {
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.btn-submit {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #357abd;
+}
+
+.result-card {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9fbfd;
+    border-left: 5px solid #4a90e2;
+    border-radius: 4px;
+}
+
+.result-card h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.markdown-output {
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.quiz-list li {
+    margin-bottom: 15px;
+}
+
+.answer {
+    color: #27ae60;
+    font-weight: 500;
+}
+
+.error {
+    color: #c0392b;
+    background: #fdecea;
+    border-left: 4px solid #c0392b;
+    padding: 12px;
+    border-radius: 4px;
+    line-height: 1.5;
+}
