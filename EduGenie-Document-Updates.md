@@ -23,6 +23,16 @@ does, so the report and the deliverable agree.
 | 9 | Pre-requisites | Never mentions `pip install -r requirements.txt` | Add a step 7 |
 | 10 | Pre-requisites, Gemini API Key | Does not say where to store the key | Add `.env` location + key-format warning |
 
+Items 9 and 10 patch single sentences. **Part 2 (items 13–15) supersedes both** with a full
+rewrite of the Pre-requisites section, which additionally fixes two incorrect documentation
+links and two items that have no installation steps at all. Apply Part 2 instead of 9 and 10.
+
+| # | Location in document | Problem | Fix |
+|---|---|---|---|
+| 13 | Pre-requisites, item 1 (Python) | Cites *Google AI for Developers* and *Tom's Hardware* as Python documentation | Correct links (python.org, docs.python.org) + virtualenv step |
+| 14 | Pre-requisites, items 2–6 | FastAPI and HTML/CSS have no installation steps; separate `pip install` per package cannot produce a working project | Consistent steps, each pointing at the single install command |
+| 15 | Pre-requisites, new item 7 | Omits `python-multipart` and `python-dotenv` — without them the app cannot run | List all 8 pinned dependencies and what each one does |
+
 ---
 
 ## 1. Project Description — line 11
@@ -273,7 +283,7 @@ It generates three questions with 4 options each and displays the correct answer
 
 ---
 
-## 11. Optional — running on an OpenAI-compatible endpoint (nothing to change for submission)
+## 12. Optional — running on an OpenAI-compatible endpoint (nothing to change for submission)
 
 **This section requires no edit to the document.** The project ships with Gemini as the only active
 provider, so every replacement above describes exactly what runs by default.
@@ -319,4 +329,219 @@ One more optional pass, if you want the document to be fully accurate:
 - **Challenges paragraph** (line 282) — it says "maintaining performance across devices" and
   "addressing data privacy concerns". Both are still fair, since the app runs entirely in the cloud.
 
+---
 
+# PART 2 — Pre-requisites section (full rewrite)
+
+The items above each correct a single sentence. The following three items replace the
+**entire Pre-requisites block (document lines 39–71)** with a corrected version, because that
+section contains wrong references, items with no installation steps, and omits two
+dependencies the project genuinely needs.
+
+> Apply items 7 and 8 (the single-sentence Pre-requisites fixes) **or** items 13–15 (the full
+> Pre-requisites rewrite) — not both, since they cover the same document lines.
+
+## Summary of Part 2
+
+| Item | Document lines | What changes |
+|---|---|---|
+| 13 | 39–48 (item 1, Python) | Wrong documentation links: Google AI docs → python.org; Tom's Hardware → official guide |
+| 14 | 51–71 (items 2–6) | Adds the missing installation steps for FastAPI, HTML/CSS and Gemini; corrects the Gemini key storage step |
+| 15 | insert after 71 | New item 7: `requirements.txt` as the single install step, listing all 8 pinned dependencies |
+
+---
+
+## 13. Pre-requisites, item 1 (Python 3.10+) — document lines 39–48
+
+**Original (delete):**
+
+```
+   1. Python 3.10+
+* Official Documentation: Google AI for Developers
+* Installation Guide: Tom's Hardware
+* Popular Tutorial: Python Programming Tutorial - Full Course for Beginners
+* Installation Steps:
+1. Download the latest Python 3.10+ installer for your operating system from the official website.
+2. Run the installer and ensure you check the box that says "Add Python to PATH".
+3. Follow the installation prompts to complete the setup.
+4. Verify the installation by opening a terminal or command prompt and typing python --version.
+```
+
+**Replacement (paste):**
+
+```
+1. Python 3.10+
+* Official Documentation: https://docs.python.org/3/
+* Official Download: https://www.python.org/downloads/
+* Installation Guide: https://docs.python.org/3/using/windows.html
+* Popular Tutorial: Python Programming Tutorial - Full Course for Beginners
+* Installation Steps:
+   1. Download the latest Python 3.10+ installer for your operating system from
+      https://www.python.org/downloads/ and run it.
+   2. On Windows, tick the box labelled "Add python.exe to PATH" before continuing.
+      This is the option that allows python and pip to be run from any terminal.
+   3. Follow the remaining installation prompts to complete the setup.
+   4. Verify the installation by opening a terminal or command prompt and typing
+      python --version. A version number of 3.10 or higher confirms a successful setup.
+   5. Create an isolated virtual environment for the project so that its dependencies
+
+---
+
+## 14. Pre-requisites, items 2–6 (FastAPI, HTML & CSS, Gemini key, Uvicorn, Jinja2) — document lines 51–71
+
+**Original (delete):**
+
+```
+2. FastAPI Framework – 
+* Official Documentation: FastAPI
+* User Guide: FastAPI
+* Popular Tutorial: FastAPI Crash Course
+3. HTML & CSS – Basic templating used in /templates and /static
+4. Google Gemini API Key
+* Official Documentation: Google AI for Developers
+* Setup Guide: GeeksforGeeks
+* Popular Tutorial: How to Use Google Gemini API Key
+* Setup Steps:
+   1. Visit the Google AI Studio and sign in with your Google account.
+   2. Create a new project and enable the Gemini API.
+   3. Generate an API key and securely store it.
+5. Uvicorn (ASGI Server)
+* Official Documentation: PyPI
+* Installation Steps:
+   1. Install Uvicorn using pip: pip install uvicorn
+6. Jinja2 (HTML Templating Engine)
+* Official Documentation: Jinja2 Documentation
+* Installation Steps:
+   1. Install Jinja2 using pip: pip install jinja2
+```
+
+**Replacement (paste):**
+
+```
+2. FastAPI Framework
+* Official Documentation: https://fastapi.tiangolo.com/
+* User Guide: https://fastapi.tiangolo.com/tutorial/
+* Popular Tutorial: FastAPI Crash Course
+* Role in EduGenie: provides the web server, the REST endpoints and the HTML page routing
+* Installation Steps:
+   1. Installed automatically with the other project dependencies, using the command in
+      item 7 below:  pip install -r requirements.txt
+
+3. HTML & CSS – Basic templating used in /templates and /static
+* Official Documentation: https://developer.mozilla.org/en-US/docs/Web/HTML and
+  https://developer.mozilla.org/en-US/docs/Web/CSS
+* Role in EduGenie: the Jinja2 template templates/index.html renders the page, and
+  static/style.css and static/app.js style it and give each feature its own form
+* Installation Steps:
+   1. No installation is required. HTML and CSS are plain text files that the browser
+      renders, and both are already included in the project folder.
+
+4. Google Gemini API Key
+* Official Documentation: https://ai.google.dev/gemini-api/docs
+* Key Management: https://aistudio.google.com/apikey
+* Setup Steps:
+   1. Visit the Google AI Studio at https://aistudio.google.com/apikey and sign in with
+      your Google account.
+   2. Click "Create API key", select or create a project, and confirm.
+   3. Store the generated key in a file named .env placed inside the EduGenie folder:
+        GEMINI_API_KEY=your_key_here
+      The file is listed in .gitignore, so the key is never committed to version control.
+      A ready-to-copy template is supplied as EduGenie/.env.example.
+   4. Note the key format: Gemini keys begin with AIza (Standard key) or AQ. (Auth key).
+      A key beginning with sk- is an OpenAI key and is always rejected by the Gemini API.
+
+5. Uvicorn (ASGI Server)
+* Official Documentation: https://www.uvicorn.org/
+* PyPI: https://pypi.org/project/uvicorn/
+* Installation Steps:
+   1. Installed automatically with the other project dependencies, using the command in
+      item 7 below:  pip install -r requirements.txt
+   2. Start the application with:  uvicorn main:app --reload
+
+---
+
+## 15. Pre-requisites — new item 7 (installing the project) — insert after document line 71
+
+This is the most important addition. The original Pre-requisites section never explains how to
+install the project, and it omits two packages the application cannot run without.
+
+**Original (delete):** nothing to delete — this item is inserted after item 6 (Jinja2).
+
+**Replacement (paste):**
+
+```
+7. Project Dependencies (requirements.txt)
+* Installation Steps:
+   1. Open a terminal and change into the application folder, because requirements.txt is
+      inside EduGenie and not in the project root:
+        cd EduGenie
+      Running this command from the parent folder produces
+      "ERROR: Could not open requirements file: requirements.txt".
+   2. Install every dependency in one step, from inside the EduGenie folder:
+        pip install -r requirements.txt
+   3. Start the application and open http://127.0.0.1:8000 in a browser:
+        uvicorn main:app --reload
+      Running "python main.py" from the same folder starts the same server.
+* Packages installed:
+   1. fastapi           - the web framework serving the page and the REST endpoints
+   2. uvicorn           - the ASGI server that runs the application
+   3. jinja2            - renders templates/index.html
+   4. google-genai      - the Google Gen AI SDK used to call Gemini
+   5. python-dotenv     - loads the API key from the .env file
+   6. python-multipart  - required by FastAPI to read HTML form submissions. Without it
+                          every "Get Answer", "Explain", "Summarize" and "Generate Quiz"
+                          button fails with a server error.
+   7. pydantic          - data validation used internally by FastAPI
+   8. httpx             - HTTP client used by the optional OpenAI-compatible provider
+```
+
+> **Why:** the original list omits `python-multipart` and `python-dotenv` entirely, yet the
+> application depends on both. `python-multipart` is the one that matters most: FastAPI raises a
+> runtime error the moment a form field is read unless it is installed, so a reader who follows
+> the original six items exactly would install the project and find that every button on the page
+> fails. `python-dotenv` is equally required, since without it the API key in `.env` is never
+> read and the application reports a missing key at startup. Both are therefore listed here
+> rather than added to items 2–6, so the six technologies named in the document keep their
+> original numbering.
+>
+> The `cd EduGenie` step is also stated explicitly, because `requirements.txt` sits inside the
+> `EduGenie` folder rather than the project root. Installing from the parent folder fails with
+> `Could not open requirements file`, which is the first error encountered when following the
+> original document.
+>
+> The model name is not listed here because it is configuration, not a prerequisite. The
+> application reads `GEMINI_MODEL` from `.env` and defaults to `gemini-3.6-flash`.
+
+      Running python main.py from inside the EduGenie folder starts the same server.
+
+6. Jinja2 (HTML Templating Engine)
+* Official Documentation: https://jinja.palletsprojects.com/
+* Installation Steps:
+   1. Installed automatically with the other project dependencies, using the command in
+      item 7 below:  pip install -r requirements.txt
+```
+
+> **Why:** item 3 (HTML & CSS) had no references and no installation steps at all, even though
+> it is one of the six listed technologies. Items 2, 5 and 6 each install their package
+> separately, which cannot produce a working project on its own — FastAPI additionally refuses
+> to start without the form-parsing and template packages below, so installing it alone fails.
+> The `pip install -r requirements.txt` command in item 7 is the real installation step for the
+> whole project, and these entries now point to it instead of implying three separate installs.
+> The Gemini key step is corrected to specify the `.env` file, because storing the key "securely"
+> without saying where leaves the reader with no way to supply it, and a key placed in source
+> code would be exposed publicly.
+
+      do not affect the system Python:
+         python -m venv venv
+         venv\Scripts\activate          (Windows)
+         source venv/bin/activate       (macOS / Linux)
+      The prompt changes to (venv) when the environment is active.
+```
+
+> **Why:** the original credits *Google AI for Developers* as the official documentation for
+> Python. That is Google's documentation, not Python's — the correct references are python.org
+> and docs.python.org. Citing a third-party hardware site as the installation guide is also
+> weaker than the official guidance, and the same document already uses official sources
+> elsewhere, so the inconsistency stands out. Steps 5 and the PATH note are added because the
+> project is developed inside a virtual environment, and a missing PATH entry is the single
+> most common cause of `python` not being recognised in the terminal.

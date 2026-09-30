@@ -1,76 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduGenie - Learning Assistant</title>
+    <title>EduGenie - AI Tutor</title>
+    <meta name="description" content="Your personal AI tutor for learning support.">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode"
+        title="Toggle dark mode"><span aria-hidden="true">&#9790;</span></button>
+
     <div class="container">
         <header>
-            <h1>✨ EduGenie</h1>
-            <p>Your Google Gemini Powered Learning Assistant</p>
+            <h1>Welcome to EduGenie &#129504;&#10024;</h1>
+            <p>Your personal AI tutor for learning support!</p>
         </header>
 
         <main>
-            <form action="/process" method="POST" class="card">
-                <div class="form-group">
-                    <label for="task">Select Task:</label>
-                    <select name="task" id="task" required>
-                        <option value="explain" {% if selected_task=='explain' %}selected{% endif %}>Concept Explanation
-                        </option>
-                        <option value="qa" {% if selected_task=='qa' %}selected{% endif %}>Q&A (Question & Answer)
-                        </option>
-                        <option value="quiz" {% if selected_task=='quiz' %}selected{% endif %}>Generate Quiz</option>
-                        <option value="summarize" {% if selected_task=='summarize' %}selected{% endif %}>Summarize
-                            Passage</option>
-                        <option value="recommend" {% if selected_task=='recommend' %}selected{% endif %}>Personalized
-                            Learning Path</option>
-                    </select>
+            <!-- Fallback notice: only shown when /process cannot map the task. -->
+            {% if selected_task and selected_task not in
+               ['qa', 'explain', 'summarize', 'quiz', 'recommend'] %}
+            <p class="error">{{ result }}</p>
+            {% endif %}
+
+            <!-- Q&A -->
+            <section class="feature">
+                <form id="qaForm" action="/process" method="POST" data-api="/api/qa" data-key="result">
+                    <input type="hidden" name="task" value="qa">
+                    <label for="question"><strong>Ask EduGenie a Question:</strong></label>
+                    <input type="text" id="question" name="user_input" placeholder="Why is the sky blue?"
+                        value="{{ user_input if selected_task == 'qa' else '' }}" required>
+                    <button type="submit">Get Answer</button>
+                </form>
+                <div id="qaResult" class="output">
+                    {% if selected_task == 'qa' and result %}
+                    <h2>Answer:</h2>
+                    <div class="markdown-output">
+                        <p>{{ result }}</p>
+                    </div>
+                    {% endif %}
                 </div>
+            </section>
 
-                <div class="form-group">
-                    <label for="user_input">Enter Topic, Question, or Passage:</label>
-                    <textarea name="user_input" id="user_input" rows="5"
-                        placeholder="Type or paste your content here..." required>{{ user_input or '' }}</textarea>
+            <!-- Explanation -->
+            <section class="feature">
+                <form id="explainForm" action="/process" method="POST" data-api="/api/explain" data-key="result">
+                    <input type="hidden" name="task" value="explain">
+                    <label for="topic"><strong>Need an Explanation?</strong></label>
+                    <input type="text" id="topic" name="user_input" placeholder="Photosynthesis"
+                        value="{{ user_input if selected_task == 'explain' else '' }}" required>
+                    <button type="submit">Explain</button>
+                </form>
+                <div id="explanationResult" class="output">
+                    {% if selected_task == 'explain' and result %}
+                    <h2>Explanation:</h2>
+                    <div class="markdown-output">
+                        <p>{{ result }}</p>
+                    </div>
+                    {% endif %}
                 </div>
+            </section>
 
-                <button type="submit" class="btn-submit">Generate with EduGenie</button>
-            </form>
+            <!-- Summary -->
+            <section class="feature">
+                <form id="summaryForm" action="/process" method="POST" data-api="/api/summarize" data-key="result">
+                    <input type="hidden" name="task" value="summarize">
+                    <label for="summaryText"><strong>Summarize a Paragraph:</strong></label>
+                    <input type="text" id="summaryText" name="user_input"
+                        placeholder="Paste long content to summarize"
+                        value="{{ user_input if selected_task == 'summarize' else '' }}" required>
+                    <button type="submit">Summarize</button>
+                </form>
+                <div id="summaryResult" class="output">
+                    {% if selected_task == 'summarize' and result %}
+                    <h2>Summary:</h2>
+                    <div class="markdown-output">
+                        <p>{{ result }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
 
-            {% if result or quiz_data %}
-            <div class="result-card">
-                <h2>Results</h2>
-                {% if quiz_data %}
-                {% if quiz_data.error %}
-                <p class="error">{{ quiz_data.error }}</p>
-                {% else %}
-                <ol class="quiz-list">
+            <!-- Quiz -->
+            <section class="feature">
+                <form id="quizForm" action="/process" method="POST" data-api="/api/quiz" data-key="quiz">
+                    <input type="hidden" name="task" value="quiz">
+                    <label for="quizText"><strong>Generate a Quiz:</strong></label>
+                    <input type="text" id="quizText" name="user_input" placeholder="Solar System"
+                        value="{{ user_input if selected_task == 'quiz' else '' }}" required>
+                    <button type="submit">Generate Quiz</button>
+                </form>
+                <div id="quizResult" class="output">
+                    {% if selected_task == 'quiz' and quiz_data %}
+                    <h2>Quiz:</h2>
                     {% for q in quiz_data %}
-                    <li>
-                        <strong>{{ q.question }}</strong>
-                        <ul>
-                            {% for opt in q.options %}
-                            <li>{{ opt }}</li>
+                    <div class="quiz-item">
+                        <p class="quiz-q"><span class="quiz-num">{{ loop.index }}</span>{{ q.question }}</p>
+                        <ul class="quiz-options">
+                            {% for option in q.options %}
+                            <li>{{ option }}</li>
                             {% endfor %}
                         </ul>
-                        <p class="answer"><em>Correct Answer: {{ q.correct_answer }}</em></p>
-                    </li>
+                        <p class="answer">Correct answer: {{ q.answer }}</p>
+                    </div>
                     {% endfor %}
-                </ol>
-                {% endif %}
-                {% else %}
-                <div class="markdown-output">
-                    <p>{{ result | safe }}</p>
+                    {% endif %}
                 </div>
-                {% endif %}
-            </div>
-            {% endif %}
+            </section>
+
+            <!-- Learning Path -->
+            <section class="feature">
+                <form id="learnForm" action="/process" method="POST" data-api="/api/learn" data-key="result">
+                    <input type="hidden" name="task" value="recommend">
+                    <label for="learnTopic"><strong>Get Learning Recommendations:</strong></label>
+                    <input type="text" id="learnTopic" name="user_input"
+                        placeholder="e.g. Linear Regression"
+                        value="{{ user_input if selected_task == 'recommend' else '' }}" required>
+                    <button type="submit">Get Recommendations</button>
+                </form>
+                <div id="learnResult" class="output">
+                    {% if selected_task == 'recommend' and result %}
+                    <h2>Learning Recommendations for &ldquo;{{ user_input }}&rdquo;:</h2>
+                    <div class="markdown-output">
+                        <p>{{ result }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
         </main>
+
+        <footer>
+            <p>Built with FastAPI &amp; Google Gemini</p>
+        </footer>
     </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="/static/app.js"></script>
 </body>
 
 </html>

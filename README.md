@@ -22,8 +22,9 @@ EduGenie/
 ├── quiz_module.py           # Quiz generation
 ├── summary_module.py        # Summarization
 ├── learning_path.py         # Learning recommendations
-├── templates/index.html     # HTML frontend
-├── static/style.css         # Styling
+├── templates/index.html     # HTML frontend (five per-feature forms)
+├── static/style.css         # Styling (light + dark theme, responsive)
+├── static/app.js            # Progressive enhancement: fetch() + Markdown + quiz reveal
 ├── requirements.txt         # Python dependencies
 ├── .env.example             # Template for your API key (copy to .env)
 └── .env                     # Your key — NOT committed to git
@@ -64,6 +65,22 @@ or simply `python main.py`. Then open <http://127.0.0.1:8000>.
 > The app must be started from inside the `EduGenie` folder, because `main.py`
 > loads `templates/`, `static/` and `.env` using relative paths.
 
+## Using the web UI
+
+The page shows **one form per feature**, stacked in this order: Ask a Question,
+Get an Explanation, Summarize, Generate a Quiz, Build a Learning Path. Each form
+has its own result panel, so answers never overwrite one another.
+
+- With JavaScript enabled, `static/app.js` intercepts each form, calls the
+  matching `/api/*` endpoint and renders the reply **in place** — no page reload.
+  Model output is rendered as Markdown and is HTML-escaped first, so a reply can
+  never inject markup into the page.
+- With JavaScript disabled the forms fall back to a normal POST to `/process`,
+  which re-renders the page with the result and the previous input restored.
+- Useful extras: a dark-mode toggle (top-right, remembered in `localStorage`),
+  a **Show correct answer** button per quiz question, and
+  <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Enter</kbd> to submit from any input.
+
 ## REST API
 
 | Method | Endpoint | Form field | Returns |
@@ -77,6 +94,22 @@ or simply `python main.py`. Then open <http://127.0.0.1:8000>.
 | POST | `/api/learn` | `topic` | `{"result": "..."}` |
 
 Interactive docs are available at <http://127.0.0.1:8000/docs>.
+
+## Tests
+
+```bash
+cd EduGenie
+python test_nojs_process.py
+```
+
+The suite stubs every model call, so it **uses no Gemini quota**. It boots the
+real app on a free port and covers both paths: the no-JavaScript `/process`
+form posts (result lands in the correct panel, input is restored, output is
+HTML-escaped) and the `/api/*` endpoints `app.js` calls, plus a static check
+that the template, `app.js` and `main.py` agree on task names and field names.
+
+> Uses `urllib` rather than starlette's `TestClient` because the installed
+> starlette (0.36.x) and httpx (0.28.x) versions are not compatible.
 
 ## Configuration
 
